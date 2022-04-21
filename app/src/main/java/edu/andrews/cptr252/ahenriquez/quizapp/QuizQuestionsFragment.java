@@ -83,7 +83,7 @@ public class QuizQuestionsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_quiz_details, container, false);
 
         // get reference to EditText box for quiz title
-        mQuestionField = v.findViewById(R.id.quiz_title);
+        mQuestionField = v.findViewById(R.id.quiz_question);
         mQuestionField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

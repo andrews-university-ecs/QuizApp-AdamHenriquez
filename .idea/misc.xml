@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/activity_quiz.xml" value="0.2006079027355623" />
         <entry key="app/src/main/res/layout/fragment_quiz_details.xml" value="0.34179534912109377" />
         <entry key="app/src/main/res/layout/fragment_quiz_list.xml" value="0.16168478260869565" />
+        <entry key="app/src/main/res/layout/list_item_question.xml" value="0.32978210449218753" />
       </map>
     </option>
   </component>

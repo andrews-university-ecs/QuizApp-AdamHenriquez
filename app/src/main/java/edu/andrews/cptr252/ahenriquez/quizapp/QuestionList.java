@@ -22,7 +22,7 @@ public class QuestionList {
         mQuestions = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
             Quiz quiz = new Quiz();
-            quiz.setQuestion("Question #" + i);
+            quiz.setQuestion("Question " + i);
             //every other one is true
             quiz.setAnswerTrue(i % 2 == 0);
             mQuestions.add(quiz);

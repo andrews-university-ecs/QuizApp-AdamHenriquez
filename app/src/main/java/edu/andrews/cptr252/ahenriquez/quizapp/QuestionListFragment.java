@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,16 @@ public class QuestionListFragment extends Fragment {
      */
     private ArrayList<Quiz> mQuestions;
 
+    /**
+     * Recycler view that displays lists of questions
+     */
+    private RecyclerView mRecyclerView;
+
+    /**
+     * Adapter that generates/reuses views to display bugs
+     */
+    private QuestionAdapter mQuestionAdapter;
+
     public QuestionListFragment() {
         //Required empty public constructor
     }
@@ -34,6 +46,8 @@ public class QuestionListFragment extends Fragment {
         getActivity().setTitle(R.string.questions_list_label);
         mQuestions = QuestionList.getInstance(getActivity()).getQuestions();
 
+        mQuestionAdapter = new QuestionAdapter(mQuestions);
+
         //for now list bugs in log
         for (Quiz quiz: mQuestions) {
             Log.d(TAG, quiz.getQuestion());
@@ -42,6 +56,13 @@ public class QuestionListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_quiz_list, container, false);
+
+        mRecyclerView = v.findViewById(R.id.question_list_recyclerView);
+        // RecyclerView will use QuestionAdapter to create views for questions
+        mRecyclerView.setAdapter(mQuestionAdapter);
+        // Use a linear layout when displaying questions
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
         return v;
     }
