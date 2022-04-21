@@ -1,14 +1,14 @@
 package edu.andrews.cptr252.ahenriquez.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends SingleFragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+    protected Fragment createFragment() {
+        return new QuizQuestionsFragment();
     }
 }
