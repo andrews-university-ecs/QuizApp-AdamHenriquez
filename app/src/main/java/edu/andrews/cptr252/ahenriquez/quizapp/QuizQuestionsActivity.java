@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
-public class QuizActivity extends SingleFragmentActivity {
+public class QuizQuestionsActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {

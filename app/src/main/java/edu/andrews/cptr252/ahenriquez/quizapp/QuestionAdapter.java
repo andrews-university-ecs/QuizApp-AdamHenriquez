@@ -115,7 +115,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         ToggleButton questionTrueToggleButton = viewHolder.questionTrueToggleButton;
 
         //Update widgets on view with quiz details
-        //questionTitleTextView.setText(quiz.getTitle());
+        //questionTitleTextView.setText(quiz.getQuestion());
         questionTextView.setText(quiz.getQuestion());
         questionTrueToggleButton.setChecked(quiz.isAnswerTrue());
     }

@@ -2,6 +2,7 @@ package edu.andrews.cptr252.ahenriquez.quizapp;
 
 import android.content.Context;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 /** Manage list of questions. This is a singleton class.
@@ -15,6 +16,19 @@ public class QuestionList {
 
     /** Reference to information about app environment */
     private Context mAppContext;
+
+    /**
+     * Return the question with a given id.
+     * @param id Unique id for the question
+     * @return The question object or null if not found.
+     */
+    public Quiz getQuestion(UUID id) {
+        for (Quiz question : mQuestions) {
+            if (question.getQuestion().equals(id))
+            return question;
+        }
+        return null;
+    }
 
     /** Private Constructor */
     private QuestionList(Context appContext) {
