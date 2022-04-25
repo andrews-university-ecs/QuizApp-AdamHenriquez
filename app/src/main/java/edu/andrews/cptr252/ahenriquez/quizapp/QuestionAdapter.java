@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.content.Intent;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +53,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         public ToggleButton questionTrueToggleButton;
 
         /**
+         * Context hosting the view
+         */
+        public Context mContext;
+
+        /**
          * Create a new view holder for a given view item in the questions list
          */
         public ViewHolder(View itemView) {
@@ -61,6 +67,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             //questionTitleTextView = itemView.findViewById(R.id.question_list_item_questionTextView);
             questionTextView = itemView.findViewById(R.id.question_list_item_questionTextView);
             questionTrueToggleButton = itemView.findViewById(R.id.question_item_list_ToggleButton);
+
+            //Get the context of the view. This will be the activity hosting the view.
+            mContext = itemView.getContext();
 
             itemView.setOnClickListener(this);
         }
@@ -77,7 +86,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             //In the future, open selected question.
             if (position != RecyclerView.NO_POSITION) {
                 Quiz quiz = mQuestions.get(position);
-                Log.d(TAG, quiz.getQuestion() + "was clicked");
+
+                //start an instance of QuizQuestionsFragment
+                Intent i = new Intent(mContext, QuizQuestionsActivity.class);
+
+                //pass the id of the question as an intent
+                i.putExtra(QuizQuestionsFragment.EXTRA_QUESTION_ID, quiz.getId());
+                mContext.startActivity(i);
+
             }
         }
     } // end ViewHolder

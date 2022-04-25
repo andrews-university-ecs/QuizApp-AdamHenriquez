@@ -44,7 +44,7 @@
             android:id="@+id/answer_true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ToggleButton"
+            android:textColor="#455A64"
             android:textOff="@string/true_text"
             android:textOn="@string/false_text" />
 

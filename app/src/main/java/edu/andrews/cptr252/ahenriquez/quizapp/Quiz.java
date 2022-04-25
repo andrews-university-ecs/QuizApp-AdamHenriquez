@@ -18,6 +18,10 @@ public class Quiz {
         //Generate unique identifier for new Question
         mId = UUID.randomUUID();
     }
+
+    public Quiz(UUID id) {
+        mId = id;
+    }
     /* Return unique id for question
     @return Question id
      */
@@ -29,6 +33,10 @@ public class Quiz {
      */
     public void setQuestion(String title) {
         mQuestion = title;
+    }
+
+    public UUID getId() {
+        return mId;
     }
 
     //getters and setters for private fields

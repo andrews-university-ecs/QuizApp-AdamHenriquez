@@ -14,6 +14,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
+import java.util.UUID;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link QuizDetailsFragment#newInstance} factory method to
@@ -35,46 +37,40 @@ public class QuizQuestionsFragment extends Fragment {
     /** Reference to true or false button */
     private ToggleButton mTrueFalseButton;
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public QuizQuestionsFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * Key used to pass the id of a bug
+     */
+    public static final String EXTRA_QUESTION_ID = "edu.andrews.cptr252.ahenriquez.quizapp.question_id";
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * Create a new QuizQuestionsFragment with a given question id as an argument.
+     * @param questionId
+     * @return A reference to the new QuizQuestionsFragment
      * @return A new instance of fragment QuizQuestionsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static QuizQuestionsFragment newInstance(String param1, String param2) {
+    public static QuizQuestionsFragment newInstance(UUID questionId) {
         QuizQuestionsFragment fragment = new QuizQuestionsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
+        args.putSerializable(EXTRA_QUESTION_ID, questionId);
+
         fragment.setArguments(args);
         return fragment;
+    }
+    public QuizQuestionsFragment() {
+        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        mQuiz = new Quiz(); //Create new question
+
+        // Extract question id from Bundle
+        UUID questionID = (UUID)getArguments().getSerializable(EXTRA_QUESTION_ID);
+
+        //Get the question with the id from the bundle
+        // This will be the question that the fragment displays
+        mQuiz = QuestionList.getInstance(getActivity()).getQuestion(questionID);
     }
 
     @Override
@@ -84,6 +80,7 @@ public class QuizQuestionsFragment extends Fragment {
 
         // get reference to EditText box for quiz title
         mQuestionField = v.findViewById(R.id.quiz_question);
+        mQuestionField.setText(mQuiz.getQuestion());
         mQuestionField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -106,7 +103,7 @@ public class QuizQuestionsFragment extends Fragment {
 
         /** Reference to true or false button*/
         mTrueFalseButton = v.findViewById(R.id.answer_true);
-
+        mTrueFalseButton.setChecked(mQuiz.isAnswerTrue());
         mTrueFalseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
