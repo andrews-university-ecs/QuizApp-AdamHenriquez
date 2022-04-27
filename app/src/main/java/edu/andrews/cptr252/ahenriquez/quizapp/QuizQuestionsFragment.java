@@ -61,6 +61,15 @@ public class QuizQuestionsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Save the question to a list to a JSON file when app is paused.
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        QuestionList.getInstance(getActivity()).saveQuestions();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +110,8 @@ public class QuizQuestionsFragment extends Fragment {
             }
         });
 
+
+
         /** Reference to true or false button*/
         mTrueFalseButton = v.findViewById(R.id.answer_true);
         mTrueFalseButton.setChecked(mQuiz.isAnswerTrue());
@@ -117,6 +128,8 @@ public class QuizQuestionsFragment extends Fragment {
 
             }
         });
+
+
 
         return v;
     }
