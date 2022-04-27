@@ -7,4 +7,5 @@
     <string name="false_text">False</string>
     <string name="true_or_false_label">Is the answer true or false?</string>
     <string name="questions_list_label">Questions</string>
+    <string name="new_question">New Question</string>
 </resources>

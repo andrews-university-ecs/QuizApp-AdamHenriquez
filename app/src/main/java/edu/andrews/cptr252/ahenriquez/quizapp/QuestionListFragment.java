@@ -1,8 +1,12 @@
 package edu.andrews.cptr252.ahenriquez.quizapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -40,9 +44,45 @@ public class QuestionListFragment extends Fragment {
         //Required empty public constructor
     }
 
+    //Create a new question, add it to the list and launch quiz editor.
+    private void addQuestion() {
+        //Create new question
+        Quiz question = new Quiz();
+        //add question to the list
+        QuestionList.getInstance(getActivity()).addQuestion(question);
+        //create an intent to send to QuizQuestionsActivity
+        //add the question ID as an extra so QuizQuestionsFragment can edit it.
+        Intent intent = new Intent(getActivity(), QuizQuestionsActivity.class);
+        intent.putExtra(QuizQuestionsFragment.EXTRA_QUESTION_ID, question.getId());
+        //launch QuizQuestionsActivity which will launch QuizQuestionsFragment
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        //Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_question_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_add_question:
+                //new question icon clicked
+                addQuestion();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
         getActivity().setTitle(R.string.questions_list_label);
         mQuestions = QuestionList.getInstance(getActivity()).getQuestions();
 

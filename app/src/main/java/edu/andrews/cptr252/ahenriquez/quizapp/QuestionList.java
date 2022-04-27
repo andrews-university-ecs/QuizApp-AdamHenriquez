@@ -18,6 +18,14 @@ public class QuestionList {
     private Context mAppContext;
 
     /**
+     * Add a question to the list.
+     * @param question is the question to add
+     */
+    public void addQuestion(Quiz question) {
+        mQuestions.add(question);
+    }
+
+    /**
      * Return the question with a given id.
      * @param id Unique id for the question
      * @return The question object or null if not found.
@@ -34,13 +42,6 @@ public class QuestionList {
     private QuestionList(Context appContext) {
         mAppContext = appContext;
         mQuestions = new ArrayList<>();
-        for(int i = 0; i < 100; i++) {
-            Quiz quiz = new Quiz();
-            quiz.setQuestion("Question " + (i+1));
-            //every other one is true
-            quiz.setAnswerTrue(i % 2 == 0);
-            mQuestions.add(quiz);
-        }
     }
     /** Create one and only one instance of the questions list.
      * (If it does not exist create it)
