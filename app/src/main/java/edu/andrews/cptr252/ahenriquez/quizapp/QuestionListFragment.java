@@ -86,7 +86,7 @@ public class QuestionListFragment extends Fragment {
         getActivity().setTitle(R.string.questions_list_label);
         mQuestions = QuestionList.getInstance(getActivity()).getQuestions();
 
-        mQuestionAdapter = new QuestionAdapter(mQuestions);
+        mQuestionAdapter = new QuestionAdapter(mQuestions, getActivity());
 
         //for now list bugs in log
         for (Quiz quiz: mQuestions) {

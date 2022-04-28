@@ -8,4 +8,6 @@
     <string name="true_or_false_label">Is the answer true or false?</string>
     <string name="questions_list_label">Questions</string>
     <string name="new_question">New Question</string>
+    <string name="undo_option">UNDO</string>
+    <string name="question_delete_msg">%1$s deleted</string>
 </resources>
