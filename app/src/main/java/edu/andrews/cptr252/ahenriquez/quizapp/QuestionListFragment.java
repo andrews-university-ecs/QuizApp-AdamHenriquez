@@ -28,7 +28,7 @@ public class QuestionListFragment extends Fragment {
     /**
      * Reference to list of questions in display
      */
-    private ArrayList<Quiz> mQuestions;
+    private ArrayList<Question> mQuestions;
 
     /**
      * Recycler view that displays lists of questions
@@ -47,7 +47,7 @@ public class QuestionListFragment extends Fragment {
     //Create a new question, add it to the list and launch quiz editor.
     private void addQuestion() {
         //Create new question
-        Quiz question = new Quiz();
+        Question question = new Question();
         //add question to the list
         QuestionList.getInstance(getActivity()).addQuestion(question);
         //create an intent to send to QuizQuestionsActivity
@@ -89,8 +89,8 @@ public class QuestionListFragment extends Fragment {
         mQuestionAdapter = new QuestionAdapter(mQuestions, getActivity());
 
         //for now list bugs in log
-        for (Quiz quiz: mQuestions) {
-            Log.d(TAG, quiz.getQuestion());
+        for (Question question : mQuestions) {
+            Log.d(TAG, question.getQuestion());
         }
     }
     @Override

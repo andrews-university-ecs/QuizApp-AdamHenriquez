@@ -32,8 +32,8 @@ public class QuestionJSONSerializer {
      * @throws IOException
      * @throws JSONException
      */
-    public ArrayList<Quiz> loadQuestions() throws IOException, JSONException {
-        ArrayList<Quiz> questions = new ArrayList<>();
+    public ArrayList<Question> loadQuestions() throws IOException, JSONException {
+        ArrayList<Question> questions = new ArrayList<>();
         BufferedReader reader = null;
         try {
             //open and read the file ino a StringBuilder
@@ -49,7 +49,7 @@ public class QuestionJSONSerializer {
             JSONArray array = (JSONArray) new JSONTokener(jsonString.toString()).nextValue();
             //build the array of questions from JSONObjects
             for (int i = 0; i < array.length(); i++) {
-                questions.add(new Quiz(array.getJSONObject(i)));
+                questions.add(new Question(array.getJSONObject(i)));
             }
         } catch (FileNotFoundException e) {
             //ignore this because it happens when we start fresh
@@ -66,10 +66,10 @@ public class QuestionJSONSerializer {
      * @throws JSONException
      * @throws IOException
      */
-    public void saveQuestions(ArrayList<Quiz> questions) throws JSONException, IOException {
+    public void saveQuestions(ArrayList<Question> questions) throws JSONException, IOException {
         //build an array in JSON
         JSONArray array = new JSONArray();
-        for (Quiz question : questions) array.put(question.toJSON());
+        for (Question question : questions) array.put(question.toJSON());
 
         //write the file to disk
         Writer writer = null;

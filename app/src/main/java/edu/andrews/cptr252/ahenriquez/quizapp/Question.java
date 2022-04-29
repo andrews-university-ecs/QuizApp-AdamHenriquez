@@ -4,7 +4,7 @@ import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Quiz {
+public class Question {
 /* UUID class is used to automatically create new unique ids for a specific question*/
 
     /* The question for the quiz */
@@ -17,9 +17,14 @@ public class Quiz {
     private UUID mId;
 
     /* Create and initialize new Question */
-    public Quiz() {
+    public Question() {
         //Generate unique identifier for new Question
         mId = UUID.randomUUID();
+    }
+
+    //Used from lab 03
+    public Question(String question) {
+        mQuestion = question;
     }
 
     //JSON attribute for question id
@@ -34,7 +39,7 @@ public class Quiz {
      * @param json is the JSON object for a question
      * @throws JSONException
      */
-    public Quiz(JSONObject json) throws JSONException {
+    public Question(JSONObject json) throws JSONException {
         mId = UUID.fromString(json.getString(JSON_ID));
         mQuestion = json.optString(JSON_QUESTION);
         mAnswerTrue = json.getBoolean(JSON_TRUE);
@@ -57,7 +62,7 @@ public class Quiz {
 
 
 
-    public Quiz(UUID id) {
+    public Question(UUID id) {
         mId = id;
     }
     /* Return unique id for question
@@ -66,7 +71,7 @@ public class Quiz {
     public String getQuestion() {
         return mQuestion;
     }
-    /* provide new question for Quiz
+    /* provide new question for Question
     @param question New question
      */
     public void setQuestion(String title) {

@@ -22,7 +22,7 @@ import java.util.UUID;
  * create an instance of this fragment.
  */
 
-/** show the details for a Quiz and allow editing
+/** show the details for a Question and allow editing
  */
 
 
@@ -31,7 +31,7 @@ public class QuizQuestionsFragment extends Fragment {
     /* Tag for logging fragment messages */
     public static final String TAG = "QuizQuestionsFragment";
     /* Bug that is being viewed or edited */
-    private Quiz mQuiz;
+    private Question mQuestion;
     /* Reference to title field for quiz */
     private EditText mQuestionField;
     /** Reference to true or false button */
@@ -79,7 +79,7 @@ public class QuizQuestionsFragment extends Fragment {
 
         //Get the question with the id from the bundle
         // This will be the question that the fragment displays
-        mQuiz = QuestionList.getInstance(getActivity()).getQuestion(questionID);
+        mQuestion = QuestionList.getInstance(getActivity()).getQuestion(questionID);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class QuizQuestionsFragment extends Fragment {
 
         // get reference to EditText box for quiz title
         mQuestionField = v.findViewById(R.id.quiz_question);
-        mQuestionField.setText(mQuiz.getQuestion());
+        mQuestionField.setText(mQuestion.getQuestion());
         mQuestionField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,9 +99,9 @@ public class QuizQuestionsFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // User typed text, update the quiz title
-                mQuiz.setQuestion(s.toString());
+                mQuestion.setQuestion(s.toString());
                 //write the new title to the message log for debugging
-                Log.d(TAG, "Question changed to " + mQuiz.getQuestion());
+                Log.d(TAG, "Question changed to " + mQuestion.getQuestion());
             }
 
             @Override
@@ -114,16 +114,16 @@ public class QuizQuestionsFragment extends Fragment {
 
         /** Reference to true or false button*/
         mTrueFalseButton = v.findViewById(R.id.answer_true);
-        mTrueFalseButton.setChecked(mQuiz.isAnswerTrue());
+        mTrueFalseButton.setChecked(mQuestion.isAnswerTrue());
         mTrueFalseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // Question is true
-                    mQuiz.setAnswerTrue(true);
+                    mQuestion.setAnswerTrue(true);
                 } else {
                     // Question is false
-                    mQuiz.setAnswerTrue(false);
+                    mQuestion.setAnswerTrue(false);
                 }
 
             }

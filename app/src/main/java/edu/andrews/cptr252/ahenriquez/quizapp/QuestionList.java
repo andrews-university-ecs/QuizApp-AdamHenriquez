@@ -14,7 +14,7 @@ public class QuestionList {
     private static QuestionList sOurInstance;
 
     /** List of questions */
-    private ArrayList<Quiz> mQuestions;
+    private ArrayList<Question> mQuestions;
 
     /** Reference to information about app environment */
     private Context mAppContext;
@@ -30,7 +30,7 @@ public class QuestionList {
      * @param position is the index for the question to add
      * @param question is the question to add.
      */
-    public void addQuestion(int position, Quiz question) {
+    public void addQuestion(int position, Question question) {
         mQuestions.add(position, question);
         saveQuestions();
     }
@@ -63,7 +63,7 @@ public class QuestionList {
      * Add a question to the list.
      * @param question is the question to add.
      */
-    public void addQuestion(Quiz question) {
+    public void addQuestion(Question question) {
         mQuestions.add(question);
         saveQuestions();
     }
@@ -74,8 +74,8 @@ public class QuestionList {
      * @param id Unique id for the question
      * @return The question object or null if not found.
      */
-    public Quiz getQuestion(UUID id) {
-        for (Quiz question : mQuestions) {
+    public Question getQuestion(UUID id) {
+        for (Question question : mQuestions) {
             if (question.getId().equals(id))
             return question;
         }
@@ -113,5 +113,5 @@ public class QuestionList {
     /** Return list of questions
      * @return Array of Question objects
      */
-    public ArrayList<Quiz> getQuestions() {return mQuestions; }
+    public ArrayList<Question> getQuestions() {return mQuestions; }
 }

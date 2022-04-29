@@ -3,7 +3,6 @@ package edu.andrews.cptr252.ahenriquez.quizapp;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -29,7 +26,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     /**
      * Used to store reference to list of questions
      */
-    private ArrayList<Quiz> mQuestions;
+    private ArrayList<Question> mQuestions;
 
     /**
      * Activity hosting the list fragment
@@ -40,7 +37,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
      * Constructor for QuestionAdapter. Initialize adapter with given list of bugs.
      * @param questions list of questions to display
      */
-    public QuestionAdapter(ArrayList<Quiz> questions, Activity activity) {
+    public QuestionAdapter(ArrayList<Question> questions, Activity activity) {
         mQuestions = questions;
         mActivity = activity;
     }
@@ -55,19 +52,19 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
      * @param question to restore
      * @param position in list where question will go
      */
-    public void restoreQuestion(Quiz question, int position) {
+    public void restoreQuestion(Question question, int position) {
         QuestionList.getInstance(mActivity).addQuestion(position, question);
         notifyItemInserted(position);
     }
 
     /**
-     * Create Snackbar with ability to undo quiz deletion
+     * Create Snackbar with ability to undo question deletion
      */
-    private void  showUndoSnackbar(final Quiz quiz, final int position) {
+    private void  showUndoSnackbar(final Question question, final int position) {
         //get root view for activity hosting question list fragment
         View view = mActivity.findViewById(android.R.id.content);
         //build message stating which question was deleted
-        String questionDeletedText = mActivity.getString(R.string.question_delete_msg, quiz.getQuestion());
+        String questionDeletedText = mActivity.getString(R.string.question_delete_msg, question.getQuestion());
         //create the snackbar
         Snackbar snackbar = Snackbar.make(view, questionDeletedText, Snackbar.LENGTH_LONG);
         //add the Undo option to the snackbar
@@ -75,7 +72,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 //undo is selected, restore the deleted item
-                restoreQuestion(quiz, position);
+                restoreQuestion(question, position);
             }
         });
         //Text for UNDO will be yellow
@@ -89,11 +86,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
      */
     public void deleteQuestion(int position) {
         //Save deleted question so we can undo the delete if needed
-        final Quiz quiz = mQuestions.get(position);
+        final Question question = mQuestions.get(position);
         // update list of questions in recyclerview
         notifyItemRemoved(position);
         //display snackbar so user may undo delete
-        showUndoSnackbar(quiz, position);
+        showUndoSnackbar(question, position);
     }
 
 
@@ -157,13 +154,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             //For now, just display the question title
             //In the future, open selected question.
             if (position != RecyclerView.NO_POSITION) {
-                Quiz quiz = mQuestions.get(position);
+                Question question = mQuestions.get(position);
 
                 //start an instance of QuizQuestionsFragment
                 Intent i = new Intent(mContext, QuizQuestionsActivity.class);
 
                 //pass the id of the question as an intent
-                i.putExtra(QuizQuestionsFragment.EXTRA_QUESTION_ID, quiz.getId());
+                i.putExtra(QuizQuestionsFragment.EXTRA_QUESTION_ID, question.getId());
                 mContext.startActivity(i);
 
             }
@@ -195,17 +192,17 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     @Override
     public void onBindViewHolder(QuestionAdapter.ViewHolder viewHolder, int position) {
         // Get bug for given index in questions list
-        Quiz quiz = mQuestions.get(position);
+        Question question = mQuestions.get(position);
 
         //get references to widgets stored in ViewHolder
         //TextView questionTitleTextView = viewHolder.questionTitleTextView;
         TextView questionTextView = viewHolder.questionTextView;
         ToggleButton questionTrueToggleButton = viewHolder.questionTrueToggleButton;
 
-        //Update widgets on view with quiz details
-        //questionTitleTextView.setText(quiz.getQuestion());
-        questionTextView.setText(quiz.getQuestion());
-        questionTrueToggleButton.setChecked(quiz.isAnswerTrue());
+        //Update widgets on view with question details
+        //questionTitleTextView.setText(question.getQuestion());
+        questionTextView.setText(question.getQuestion());
+        questionTrueToggleButton.setChecked(question.isAnswerTrue());
     }
 
     /**
