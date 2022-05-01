@@ -54,6 +54,8 @@ public class QuizModeFragment extends Fragment {
         context = v.getContext();
 
 
+
+
         questionTextView = v.findViewById(R.id.questionTextView);
 
         mQuestion = QuestionList.getInstance(getActivity()).getQuestions();
@@ -76,7 +78,18 @@ public class QuizModeFragment extends Fragment {
             return v;
         }
 
+        mNextButton = v.findViewById(R.id.nextButton);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to next question in the list
+                if (mCurrentIndex + 1 < mQuestion.size()) {
+                    mCurrentIndex++;
+                }
+                questionTextView.setText(mQuestion.get(mCurrentIndex).getQuestion());
 
+            }
+        });
 
         trueFalseButton = v.findViewById(R.id.trueFalseButton);
 
@@ -88,9 +101,6 @@ public class QuizModeFragment extends Fragment {
                 if (mQuestion.get(mCurrentIndex).isAnswerTrue() == true) {
                     score++;
                     if (mCurrentIndex + 1 < mQuestion.size()) {
-                        mCurrentIndex++;
-                    } else if (mQuestion.get(mCurrentIndex).isAnswerTrue() == false) {
-                        score++;
                     } else {
                         endQuiz();
                         return;
@@ -98,18 +108,16 @@ public class QuizModeFragment extends Fragment {
                     Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
                     correct_toast.show();
                     questionTextView.setText(mQuestion.get(mCurrentIndex).getQuestion());
+                } else if (mQuestion.get(mCurrentIndex).isAnswerTrue() == false) {
+                    score++;
                 } else {
-                    if (mCurrentIndex + 1 < mQuestion.size()) {
-                        mCurrentIndex++;
-                    } else {
-                        endQuiz();
-                        return;
-                    }
-                    Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
-                    incorrect_toast.show();
+                    endQuiz();
+                    return;
                 }
-                questionTextView.setText(mQuestion.get(mCurrentIndex).getQuestion());
+                Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
+                incorrect_toast.show();
             }
+
         });
         return v;
     }
