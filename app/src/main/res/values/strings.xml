@@ -11,4 +11,7 @@
     <string name="undo_option">UNDO</string>
     <string name="question_delete_msg">%1$s deleted</string>
     <string name="submit_answer_button">Submit</string>
+    <string name="quizModeButtonText">Take Quiz</string>
+    <string name="quizEditButtonText">Edit Quiz</string>
+    <string name="quizMenuText">Q U I Z</string>
 </resources>

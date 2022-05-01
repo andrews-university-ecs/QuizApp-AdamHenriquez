@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizApp">
         <activity
-            android:name=".QuestionListActivity"
+            android:name=".QuizMenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +20,12 @@
         </activity>
         <activity
             android:name=".QuizQuestionsActivity">
+        </activity>
+        <activity
+            android:name=".QuestionListActivity">
+        </activity>
+        <activity
+            android:name=".QuizModeActivity">
         </activity>
     </application>
 
