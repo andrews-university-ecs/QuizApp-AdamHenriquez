@@ -28,6 +28,8 @@ public class QuizModeFragment extends Fragment {
     private TextView questionTextView;
     private ToggleButton trueFalseButton;
     private Button mNextButton;
+    private Button mTrueButton;
+    private Button mFalseButton;
     private Context context;
 
     int mCurrentIndex;
@@ -85,40 +87,56 @@ public class QuizModeFragment extends Fragment {
                 //move to next question in the list
                 if (mCurrentIndex + 1 < mQuestion.size()) {
                     mCurrentIndex++;
+                } else {
+                    endQuiz();
                 }
                 questionTextView.setText(mQuestion.get(mCurrentIndex).getQuestion());
 
             }
         });
 
-        trueFalseButton = v.findViewById(R.id.trueFalseButton);
+        mTrueButton = v.findViewById(R.id.trueButton);
+        mFalseButton = v.findViewById(R.id.falseButton);
 
         final Toast correct_toast = Toast.makeText(context, "Correct", Toast.LENGTH_SHORT);
         final Toast incorrect_toast = Toast.makeText(context, "Incorrect", Toast.LENGTH_SHORT);
-        trueFalseButton.setOnClickListener(new View.OnClickListener() {
+        mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mQuestion.get(mCurrentIndex).isAnswerTrue() == true) {
+                if(mQuestion.get(mCurrentIndex).isAnswerTrue()==false) {
                     score++;
-                    if (mCurrentIndex + 1 < mQuestion.size()) {
-                    } else {
-                        endQuiz();
-                        return;
-                    }
                     Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
                     correct_toast.show();
-                    questionTextView.setText(mQuestion.get(mCurrentIndex).getQuestion());
-                } else if (mQuestion.get(mCurrentIndex).isAnswerTrue() == false) {
-                    score++;
+                    endQuiz();
+                    return;
                 } else {
+                    Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
+                    incorrect_toast.show();
                     endQuiz();
                     return;
                 }
-                Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
-                incorrect_toast.show();
             }
-
         });
+
+        mFalseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mQuestion.get(mCurrentIndex).isAnswerTrue()==true) {
+                    score++;
+                    Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
+                    correct_toast.show();
+                    endQuiz();
+                    return;
+                } else {
+                    Log.d("QuizModeFragment", "current index: " + mCurrentIndex + "Questions size: " + mQuestion.size());
+                    incorrect_toast.show();
+                    endQuiz();
+                    return;
+                }
+            }
+        });
+
+
         return v;
     }
 
