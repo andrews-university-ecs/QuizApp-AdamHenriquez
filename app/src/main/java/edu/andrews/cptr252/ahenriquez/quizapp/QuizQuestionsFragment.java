@@ -67,7 +67,7 @@ public class QuizQuestionsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        QuestionList.getInstance(getActivity()).saveQuestions();
+        QuestionList.getInstance(getActivity()).updateQuestion(mQuestion);
     }
 
     @Override

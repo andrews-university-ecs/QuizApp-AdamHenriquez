@@ -52,9 +52,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
      * @param question to restore
      * @param position in list where question will go
      */
-    public void restoreQuestion(Question question, int position) {
-        QuestionList.getInstance(mActivity).addQuestion(position, question);
-        notifyItemInserted(position);
+    public void restoreQuestion(int position, Question question) {
+        refreshQuestionListDisplay();
     }
 
     /**
@@ -72,7 +71,19 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 //undo is selected, restore the deleted item
-                restoreQuestion(question, position);
+                restoreQuestion(position, question);
+            }
+        });
+
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+
+                if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                    //Officially delete question from question list
+                    QuestionList.getInstance(mActivity).deleteQuestion(question);
+                }
             }
         });
         //Text for UNDO will be yellow
@@ -87,13 +98,19 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     public void deleteQuestion(int position) {
         //Save deleted question so we can undo the delete if needed
         final Question question = mQuestions.get(position);
-        //delete question from list
-        QuestionList.getInstance(mActivity).deleteQuestion(position);
+        //delete question from array used by adapter (not official list)
+        mQuestions.remove(position);
         // update list of questions in recyclerview
         notifyItemRemoved(position);
         //display snackbar so user may undo delete
         showUndoSnackbar(question, position);
     }
+    /**
+     * Force adapter to load new question list and generate views */
+     public void refreshQuestionListDisplay() {
+         mQuestions = QuestionList.getInstance(mActivity).getQuestions();
+         notifyDataSetChanged();
+     }
 
 
     /**

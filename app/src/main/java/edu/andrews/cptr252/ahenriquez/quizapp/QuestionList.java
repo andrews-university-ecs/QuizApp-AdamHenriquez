@@ -2,7 +2,12 @@ package edu.andrews.cptr252.ahenriquez.quizapp;
 
 import android.content.Context;
 import android.util.Log;
-
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import edu.andrews.cptr252.ahenriquez.quizapp.database.QuestionCursorWrapper;
+import edu.andrews.cptr252.ahenriquez.quizapp.database.QuestionDbHelper;
+import edu.andrews.cptr252.ahenriquez.quizapp.database.QuestionDbSchema.QuestionTable;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -13,8 +18,7 @@ import java.util.UUID;
 public class QuestionList {
     private static QuestionList sOurInstance;
 
-    /** List of questions */
-    private ArrayList<Question> mQuestions;
+    private SQLiteDatabase mDatabase;
 
     /** Reference to information about app environment */
     private Context mAppContext;
@@ -26,37 +30,61 @@ public class QuestionList {
     /** Reference to JSON serializer for a list of questions */
     private QuestionJSONSerializer mSerializer;
 
-    /** Add a question to the list at given position
-     * @param position is the index for the question to add
-     * @param question is the question to add.
+    /**
+     * Pack question information into a ContentValues object.
+     * @param question to pack.
+     * @return resulting ContentValues object
      */
-    public void addQuestion(int position, Question question) {
-        mQuestions.add(position, question);
-        saveQuestions();
+    public static ContentValues getContentValues(Question question) {
+        ContentValues values = new ContentValues();
+        values.put(QuestionTable.Cols.UUID, question.getId().toString());
+        values.put(QuestionTable.Cols.QUESTION, question.getQuestion());
+        values.put(QuestionTable.Cols.TRUE, question.isAnswerTrue() ? 1 : 0);
+
+        return values;
+    }
+
+    /**
+     * Build a query for Question DB.
+     * @param whereClause defines the where clause of a SQL query
+     * @param whereArgs defines where arguments for an SQL query
+     * @return Object defining an SQL query
+     */
+    private QuestionCursorWrapper queryQuestions(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                QuestionTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+        return new QuestionCursorWrapper(cursor);
+    }
+
+    /**
+     * Update information for a given question.
+     * @param question contains the latest information for the question.
+     */
+    public void updateQuestion(Question question) {
+        String uuidString = question.getId().toString();
+        ContentValues values = getContentValues(question);
+
+        mDatabase.update(QuestionTable.NAME, values,
+                QuestionTable.Cols.UUID + " = ?",
+                new String[] {uuidString});
     }
 
     /**
      * Delete a given question from the list of questions
-     * @param position is the index of the question to delete
+     * @param question is the index of the question to delete
      */
-    public void deleteQuestion(int position) {
-        mQuestions.remove(position);
-        saveQuestions();
-    }
-
-    /**
-     * Write question list to JSON file.
-     * @return trie if successful, false otherwise.
-     */
-    public boolean saveQuestions() {
-        try {
-            mSerializer.saveQuestions(mQuestions);
-            Log.d(TAG, "Questions saved to file");
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving questions: " + e);
-            return false;
-        }
+    public void deleteQuestion(Question question) {
+        String uuidString = question.getId().toString();
+        mDatabase.delete(QuestionTable.NAME,
+                QuestionTable.Cols.UUID + " = ? ",
+                new String [] {uuidString});
     }
 
     /**
@@ -64,8 +92,8 @@ public class QuestionList {
      * @param question is the question to add.
      */
     public void addQuestion(Question question) {
-        mQuestions.add(question);
-        saveQuestions();
+        ContentValues values = getContentValues(question);
+        mDatabase.insert(QuestionTable.NAME, null, values);
     }
 
 
@@ -75,29 +103,26 @@ public class QuestionList {
      * @return The question object or null if not found.
      */
     public Question getQuestion(UUID id) {
-        for (Question question : mQuestions) {
-            if (question.getId().equals(id))
-            return question;
+        QuestionCursorWrapper cursor = queryQuestions(QuestionTable.Cols.UUID + " = ?",
+                new String[] {id.toString()});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getQuestion();
+        } finally {
+            cursor.close();
         }
-        return null;
     }
 
     /** Private Constructor */
     private QuestionList(Context appContext) {
-        mAppContext = appContext;
-        // Create our serializer to load and save questions
-        mSerializer = new QuestionJSONSerializer(mAppContext, FILENAME);
+        mAppContext = appContext.getApplicationContext();
 
-        try {
-            //load questions from JSON file
-            mQuestions = mSerializer.loadQuestions();
-        } catch (Exception e) {
-            // Unable to load from file, so create empty question list.
-            // Either file does not exist (okay)
-            // Or file contains error (not great)
-            mQuestions = new ArrayList<>();
-            Log.e(TAG, "Error loading bugs: " + e);
-        }
+        //Open DB file or create it if it does not already exist.
+        //If the DB is older version, onUpgrade will called.
+        mDatabase = new QuestionDbHelper(mAppContext).getWritableDatabase();
     }
     /** Create one and only one instance of the questions list.
      * (If it does not exist create it)
@@ -113,5 +138,19 @@ public class QuestionList {
     /** Return list of questions
      * @return Array of Question objects
      */
-    public ArrayList<Question> getQuestions() {return mQuestions; }
+    public ArrayList<Question> getQuestions() {
+        ArrayList<Question> questions = new ArrayList<>();
+        QuestionCursorWrapper cursor = queryQuestions(null, null);
+
+        try{
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                questions.add(cursor.getQuestion());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+    return questions;
+    }
 }

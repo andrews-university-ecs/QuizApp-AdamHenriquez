@@ -89,10 +89,6 @@ public class QuestionListFragment extends Fragment {
 
         mQuestionAdapter = new QuestionAdapter(mQuestions, getActivity());
 
-        //for now list bugs in log
-        for (Question question : mQuestions) {
-            Log.d(TAG, question.getQuestion());
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -120,6 +116,6 @@ public class QuestionListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume(); //first execute parent's onResume method
-        mQuestionAdapter.notifyDataSetChanged();
+        mQuestionAdapter.refreshQuestionListDisplay();
     }
 }
