@@ -87,6 +87,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     public void deleteQuestion(int position) {
         //Save deleted question so we can undo the delete if needed
         final Question question = mQuestions.get(position);
+        //delete question from list
+        QuestionList.getInstance(mActivity).deleteQuestion(position);
         // update list of questions in recyclerview
         notifyItemRemoved(position);
         //display snackbar so user may undo delete

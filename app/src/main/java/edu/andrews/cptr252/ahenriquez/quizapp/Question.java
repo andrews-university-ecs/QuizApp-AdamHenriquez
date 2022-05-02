@@ -19,7 +19,7 @@ public class Question {
     /* Create and initialize new Question */
     public Question() {
         //Generate unique identifier for new Question
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID());
     }
 
     //Used from lab 03

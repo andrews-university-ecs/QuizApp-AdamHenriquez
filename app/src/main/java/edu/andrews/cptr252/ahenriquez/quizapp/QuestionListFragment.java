@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -102,6 +103,10 @@ public class QuestionListFragment extends Fragment {
         mRecyclerView.setAdapter(mQuestionAdapter);
         // Use a linear layout when displaying questions
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        QuestionSwiper questionSwiper = new QuestionSwiper(mQuestionAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(questionSwiper);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
 
         return v;
