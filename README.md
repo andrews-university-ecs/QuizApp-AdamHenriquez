@@ -1,5 +1,5 @@
-# finalproject-AdamHenriquez
-finalproject-AdamHenriquez created by GitHub Classroom
+# Quiz App - AdamHenriquez
+QuizApp-AdamHenriquez created by GitHub Classroom
 
 This is a simple quiz taker application that allows the user to create/edit questions and 
 quiz themselves in a quiz mode.  
